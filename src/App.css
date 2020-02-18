@@ -64,6 +64,12 @@ body {
   
 }
 
+.result{
+  border: none;
+  outline: 0;
+  margin: 20px;
+}
+
 .label{
   float: left;
 }

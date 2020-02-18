@@ -4,22 +4,45 @@ import './App.css';
 
 function App() {
 
-  const [infixada, setInfixada] = useState('');
-
+  var [infixada, setInfixada] = useState('');
+  var [result, setResult] = useState('');
   function calc(){
+    
     const pilha = [];
-    infixada.forEach((element, i) => {
-      pilha.push(element[i]);
-    });
+    var tam = infixada.length;
+    var result2 = '';
+    for(var i = 0; i< infixada.length; i++){
+      if(prioridade(infixada[i]) == 0){      
+        result2+= infixada[i];
+      }
+      if(prioridade(infixada[i]) >= prioridade(infixada[i+2]) && i+2 < tam ) {  
+          result2+= infixada[i+1];
+          result2+= infixada[i];
+      }else if(prioridade(infixada[i]) <= prioridade(infixada[i+2]) && i+2 < tam){  
+        result2+= infixada[i+1];
+        result2+= infixada[i];
+      }
+      
+    }
+
+    // const aux = pilha.length;
+    
+   
+    // for(var k=0;k<aux;k++){
+    //   result2 += pilha[k];
+    // }
+
+    setResult(result2);
   }
   function prioridade(char){
     if(char == '(') return 1;
-    else {
-      if(char == '*' || char == '/') return 2;
-      else{
-        return 3;
-      }
-    }
+
+    if(char == '*' || char == '/') return 2;
+
+    if(char == '+' || char == '-') return 3;
+
+    else return 0; 
+
   }
 
   return (
@@ -33,7 +56,9 @@ function App() {
 
         <button className="btn" onClick={calc}> CALCULAR </button>
 
-        <div className="result"> </div>
+        <div className="result"> 
+         <input value={ result }></input>
+        </div>
       </div>
     </div>
   );
