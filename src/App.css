@@ -39,6 +39,10 @@ body {
   width: 300px;
 }
 
+.result{
+
+}
+
 .inp{
   background-color: #fff;
   width: 100%;
@@ -52,7 +56,8 @@ body {
 }
 
 .btn{
-  width: 50%;
+  margin-right: 5px;
+  width: 100%;
   height: 40px;
   background-color: rgb(233, 197, 39);
   color: white;
@@ -64,10 +69,40 @@ body {
   
 }
 
+.btns{
+  flex-direction: row;
+  justify-content: space-around;
+  display: flex;
+  position: relative;
+  width: 100%;
+}
+
+.btn2{
+  margin-left: 5px;
+  width: 100%;
+  height: 40px;
+  background-color: rgb(233, 133, 39);
+  color: white;
+  padding: 10px 0px;
+  border-radius: 5px;
+  font-weight: bold;
+  border: 0;
+  cursor: pointer;
+  
+}
 .result{
   border: none;
+  border-width: 0px;
   outline: 0;
-  margin: 20px;
+  background-color: #fff;
+  width: 100%;
+  height: 40px;
+  padding: 5px;
+  border-radius: 5px;
+  font-weight: bold;
+
+  margin: 10px 0px;
+  margin-right: 10px;
 }
 
 .label{

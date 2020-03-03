@@ -6,42 +6,70 @@ function App() {
 
   var [infixada, setInfixada] = useState('');
   var [result, setResult] = useState('');
-  function calc(){
-    
-    const pilha = [];
-    var tam = infixada.length;
-    var result2 = '';
-    for(var i = 0; i< infixada.length; i++){
-      if(prioridade(infixada[i]) == 0){      
-        result2+= infixada[i];
-      }
-      if(prioridade(infixada[i]) >= prioridade(infixada[i+2]) && i+2 < tam ) {  
-          result2+= infixada[i+1];
-          result2+= infixada[i];
-      }else if(prioridade(infixada[i]) <= prioridade(infixada[i+2]) && i+2 < tam){  
-        result2+= infixada[i+1];
-        result2+= infixada[i];
-      }
-      
-    }
 
-    // const aux = pilha.length;
-    
-   
-    // for(var k=0;k<aux;k++){
-    //   result2 += pilha[k];
-    // }
+  const Compara = (a, b) => {
 
-    setResult(result2);
+    return a <= b;
   }
-  function prioridade(char){
-    if(char == '(') return 1;
+  function calc() {
 
-    if(char == '*' || char == '/') return 2;
+    const pilha = [];
 
-    if(char == '+' || char == '-') return 3;
+    for (var i = 0; i < infixada.length; i++) {
+      if (pilha.length == 0) {
+       
+        
+        if (prioridade(infixada[i]) != 0) {
+          pilha.unshift(infixada[i])
+          // console.log(infixada[i]);
 
-    else return 0; 
+        } else if (prioridade(infixada[i]) == 0) {
+          result += infixada[i];
+        }
+      }
+      else if (prioridade(infixada[i]) == 0) {
+        result += infixada[i];
+      
+      }
+      else if (prioridade(infixada[i]) < prioridade(pilha[0])) {
+        
+        result += pilha.shift();
+       
+      }
+      else if (prioridade(infixada[i]) >= prioridade(pilha[0])) {
+       
+        if (pilha.length > 0) {
+          if(prioridade(infixada[i]) == prioridade(pilha[0])){
+            console.log(pilha[0]);
+            
+            result += pilha.shift();
+            pilha.unshift(infixada[i]);
+          }else{
+            pilha.unshift(infixada[i]);
+          }
+        } else{
+  
+
+        }
+
+      }
+
+
+    }
+    pilha.map(ele => {
+      result += ele;
+    })
+
+    setResult(result);
+  }
+  function prioridade(char) {
+    if (char == '(') return 3;
+
+    if (char == '*' || char == '/') return 2;
+
+    if (char == '+' || char == '-') return 1;
+
+    else return 0;
 
   }
 
@@ -50,14 +78,17 @@ function App() {
       <div className="box">
         <h4 className="title">CONVERSÃO</h4>
         <h5 className="label">
-            Digite a expressão :
+          Digite a expressão :
         </h5>
-        <input className="inp" placeholder="infixada" value={infixada} onChange={event=> setInfixada(event.target.value)}></input>
+        <input className="inp" placeholder="infixada" value={infixada} onChange={event => setInfixada(event.target.value)}></input>
 
-        <button className="btn" onClick={calc}> CALCULAR </button>
+       <div className="btns">
+       <button className="btn" onClick={calc}> CALCULAR </button>
+        <button className="btn2" onClick={()=> setResult('')}> LIMPAR </button>
+       </div>
 
-        <div className="result"> 
-         <input value={ result }></input>
+        <div>
+          <input disabled={true} className="result" value={result}></input>
         </div>
       </div>
     </div>
