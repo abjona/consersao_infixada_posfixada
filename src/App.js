@@ -7,71 +7,60 @@ function App() {
   var [infixada, setInfixada] = useState('');
   var [result, setResult] = useState('');
 
-  const Compara = (a, b) => {
-
-    return a <= b;
-  }
-  function calc() {
-
-    const pilha = [];
-
-    for (var i = 0; i < infixada.length; i++) {
-      if (pilha.length == 0) {
-       
-        
-        if (prioridade(infixada[i]) != 0) {
-          pilha.unshift(infixada[i])
-          // console.log(infixada[i]);
-
-        } else if (prioridade(infixada[i]) == 0) {
-          result += infixada[i];
-        }
-      }
-      else if (prioridade(infixada[i]) == 0) {
-        result += infixada[i];
+  function calc(){
+    var prec = {}
+    prec["*"] = 3
+    prec["/"] = 3
+    prec["+"] = 2
+    prec["-"] = 2
+    prec["("] = 1
+    var opStack = []
+    var postfixList = []
+    var tokenList = infixada;
+    var verStr = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    var verNum = "0123456789";
+    var resp = '';
+    console.log(tokenList);
+    
+    for(var i=0;i<infixada.length;i++){
       
+      if (verNum.includes(infixada[i]) || verStr.includes(infixada[i])){
+        postfixList.push(infixada[i]);
       }
-      else if (prioridade(infixada[i]) < prioridade(pilha[0])) {
-        
-        result += pilha.shift();
-       
+      else if (infixada[i] === '('){
+        opStack.push(infixada[i]);
       }
-      else if (prioridade(infixada[i]) >= prioridade(pilha[0])) {
-       
-        if (pilha.length > 0) {
-          if(prioridade(infixada[i]) == prioridade(pilha[0])){
-            console.log(pilha[0]);
-            
-            result += pilha.shift();
-            pilha.unshift(infixada[i]);
-          }else{
-            pilha.unshift(infixada[i]);
-          }
-        } else{
-  
-
-        }
-
+      else if (infixada[i] === ')'){
+        var topToken = opStack.pop();
+        while (topToken !== '('){
+          postfixList.push(topToken);
+          topToken = opStack.pop();
+       }
       }
-
-
+     
+      else{
+        while (opStack.length > 0 && (prec[opStack[opStack.length-1]] >= prec[infixada[i]]))
+              postfixList.push(opStack.pop())
+              opStack.push(infixada[i])
     }
-    pilha.map(ele => {
-      result += ele;
-    })
+    }
+ 
 
-    setResult(result);
-  }
-  function prioridade(char) {
-    if (char == '(') return 3;
+    while (opStack.length > 0){
+      postfixList.push(opStack.pop())
+    }
+   
+    postfixList.forEach(element => {
+      resp+=element;
+    });
 
-    if (char == '*' || char == '/') return 2;
+    setResult(resp)
+    
 
-    if (char == '+' || char == '-') return 1;
+    };
+       
 
-    else return 0;
-
-  }
+  
 
   return (
     <div className="container">
