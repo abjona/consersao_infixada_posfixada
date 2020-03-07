@@ -7,60 +7,52 @@ function App() {
   var [infixada, setInfixada] = useState('');
   var [result, setResult] = useState('');
 
-  function calc(){
+  function calc() {
+    var opStack = []
+    var postfixList = []
+    var verStr = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    var verNum = "0123456789";
+    var resp = '';
     var prec = {}
+
     prec["*"] = 3
     prec["/"] = 3
     prec["+"] = 2
     prec["-"] = 2
     prec["("] = 1
-    var opStack = []
-    var postfixList = []
-    var tokenList = infixada;
-    var verStr = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    var verNum = "0123456789";
-    var resp = '';
-    console.log(tokenList);
-    
-    for(var i=0;i<infixada.length;i++){
-      
-      if (verNum.includes(infixada[i]) || verStr.includes(infixada[i])){
+
+    for (var i = 0; i < infixada.length; i++) {
+
+      if (verNum.includes(infixada[i]) || verStr.includes(infixada[i])) {
         postfixList.push(infixada[i]);
       }
-      else if (infixada[i] === '('){
+      else if (infixada[i] === '(') {
         opStack.push(infixada[i]);
       }
-      else if (infixada[i] === ')'){
+      else if (infixada[i] === ')') {
         var topToken = opStack.pop();
-        while (topToken !== '('){
+        while (topToken !== '(') {
           postfixList.push(topToken);
           topToken = opStack.pop();
-       }
+        }
       }
-     
-      else{
-        while (opStack.length > 0 && (prec[opStack[opStack.length-1]] >= prec[infixada[i]]))
-              postfixList.push(opStack.pop())
-              opStack.push(infixada[i])
+      else {
+        while (opStack.length > 0 && (prec[opStack[opStack.length - 1]] >= prec[infixada[i]]))
+          postfixList.push(opStack.pop())
+        opStack.push(infixada[i])
+      }
     }
-    }
- 
 
-    while (opStack.length > 0){
+    while (opStack.length > 0) {
       postfixList.push(opStack.pop())
     }
-   
+
     postfixList.forEach(element => {
-      resp+=element;
+      resp += element;
     });
 
-    setResult(resp)
-    
-
-    };
-       
-
-  
+    setResult(resp);
+  };
 
   return (
     <div className="container">
@@ -71,10 +63,13 @@ function App() {
         </h5>
         <input className="inp" placeholder="infixada" value={infixada} onChange={event => setInfixada(event.target.value)}></input>
 
-       <div className="btns">
-       <button className="btn" onClick={calc}> CALCULAR </button>
-        <button className="btn2" onClick={()=> setResult('')}> LIMPAR </button>
-       </div>
+        <div className="btns">
+          <button className="btn" onClick={calc}> CALCULAR </button>
+          <button className="btn2" onClick={() => {
+            setResult('');
+            setInfixada('')
+          }}> LIMPAR </button>
+        </div>
 
         <div>
           <input disabled={true} className="result" value={result}></input>
